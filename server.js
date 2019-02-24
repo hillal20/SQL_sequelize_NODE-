@@ -31,18 +31,32 @@ const UserModel = connection.define("UserModel", {
     primaryKey: true,
     defaultValue: Sequelize.UUIDV4
   },
-  name: Sequelize.STRING,
+  name: {
+    type: Sequelize.STRING,
+    validate: {
+      len: [3, 9] // 3 min char and 7 max char
+    }
+  },
   bio: Sequelize.TEXT
 });
 
-connection.sync({ force: true }).then(() => {
+connection.sync({ force: true });
+
+///////////////////////////// routes
+server.get("/user", (req, res) => {
   UserModel.create({
-    name: "hilal",
+    name: "hil",
     bio: "bio for hilal"
-  });
+  })
+    .then(msg => {
+      res.json(msg);
+    })
+    .catch(err => {
+      res.json({ msg: "short name" });
+    });
 });
 
-/////////////////////////////
+///////////////////////////
 server.listen(9999, () => {
   console.log("=== server on 9999 ===");
 });
