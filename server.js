@@ -6,7 +6,10 @@ const connection = new Sequelize("db", "user", "pass", {
   host: "localhost",
   dialect: "sqlite",
   storage: "db.sqlite",
-  operatorsAliases: false
+  operatorsAliases: false,
+  define: {
+    freezeTableTableName: true
+  }
 });
 
 connection
@@ -17,7 +20,6 @@ connection
   .catch(err => {
     console.log(" === err in database connection ===");
   });
-connection.sync();
 
 /////////////////////////////////// models
 
@@ -30,10 +32,14 @@ const UserModel = connection.define("UserModel", {
   name: Sequelize.STRING,
   bio: Sequelize.TEXT
 });
-UserModel.create({
-  name: "hilal",
-  bio: "bio for hilal"
+
+connection.sync({ force: true }).then(() => {
+  UserModel.create({
+    name: "hilal",
+    bio: "bio for hilal"
+  });
 });
+
 /////////////////////////////
 server.listen(9999, () => {
   console.log("=== server on 9999 ===");
