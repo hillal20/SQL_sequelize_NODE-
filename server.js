@@ -8,6 +8,7 @@ const connection = new Sequelize("db", "user", "pass", {
   storage: "db.sqlite",
   operatorsAliases: false,
   define: {
+    // the same define in the creation of the model
     freezeTableName: true,
     timestamps: false
   }
