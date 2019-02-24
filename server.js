@@ -25,20 +25,39 @@ connection
 
 /////////////////////////////////// models
 
-const UserModel = connection.define("UserModel", {
-  uuid: {
-    type: Sequelize.UUID,
-    primaryKey: true,
-    defaultValue: Sequelize.UUIDV4
+const UserModel = connection.define(
+  "UserModel",
+  {
+    uuid: {
+      type: Sequelize.UUID,
+      primaryKey: true,
+      defaultValue: Sequelize.UUIDV4
+    },
+    name: {
+      type: Sequelize.STRING,
+      validate: {
+        len: [3, 9] // 3 min char and 7 max char
+      }
+    },
+    bio: Sequelize.TEXT
   },
-  name: {
-    type: Sequelize.STRING,
-    validate: {
-      len: [3, 9] // 3 min char and 7 max char
+  {
+    hooks: {
+      beforeValidate: () => {
+        console.log("== before validate ");
+      },
+      afterValidate: () => {
+        console.log("== after validate ");
+      },
+      beforeCreate: () => {
+        console.log("== before create ");
+      },
+      afterCreate: () => {
+        console.log("== after create ");
+      }
     }
-  },
-  bio: Sequelize.TEXT
-});
+  }
+);
 
 connection.sync({ force: true });
 
