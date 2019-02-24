@@ -17,6 +17,24 @@ connection
   .catch(err => {
     console.log(" === err in database connection ===");
   });
+connection.sync();
+
+/////////////////////////////////// models
+
+const UserModel = connection.define("UserModel", {
+  uuid: {
+    type: Sequelize.UUID,
+    primaryKey: true,
+    defaultValue: Sequelize.UUIDV4
+  },
+  name: Sequelize.STRING,
+  bio: Sequelize.TEXT
+});
+UserModel.create({
+  name: "hilal",
+  bio: "bio for hilal"
+});
+/////////////////////////////
 server.listen(9999, () => {
   console.log("=== server on 9999 ===");
 });
