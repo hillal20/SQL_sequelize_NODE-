@@ -80,8 +80,10 @@ connection
 ///////////////////////////// routes
 server.get("/user", (req, res) => {
   UserModel.create({
-    name: "hil",
-    bio: "bio for hilal"
+    name: "khalil",
+    bio: "abado",
+    address: "milal algeria ",
+    zipCode: 18340
   })
     .then(msg => {
       res.json(msg);
