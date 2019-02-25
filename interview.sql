@@ -14,3 +14,7 @@ DCL ( Data Control Language)
 table refers to a collection of data 
   Example Table: StudentInformation
           Field: Stu Id, Stu Name, Stu Marks
+
+
+Primary key is a column (or collection of columns) 
+    that uniquely identifies each row in the table.
