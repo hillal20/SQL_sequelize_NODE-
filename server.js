@@ -39,7 +39,10 @@ const UserModel = connection.define(
         len: [3, 9] // 3 min char and 7 max char
       }
     },
-    bio: Sequelize.TEXT
+    bio: Sequelize.TEXT,
+    address: Sequelize.TEXT,
+    zipCode: Sequelize.INTEGER,
+    fullAdd: Sequelize.STRING
   },
   {
     hooks: {
@@ -49,7 +52,8 @@ const UserModel = connection.define(
       afterValidate: () => {
         console.log("== after validate ");
       },
-      beforeCreate: () => {
+      beforeCreate: userModel => {
+        userModel.fullAdd = `${userModel.address} ${userModel.zipCode}`;
         console.log("== before create ");
       },
       afterCreate: () => {
@@ -59,7 +63,19 @@ const UserModel = connection.define(
   }
 );
 
-connection.sync({ force: true });
+connection
+  .sync({ force: true })
+  .then(() => {
+    UserModel.create({
+      name: "billal",
+      bio: "hahahahah",
+      address: "settara jijel",
+      zipCode: 18340
+    });
+  })
+  .catch(err => {
+    console.log("==>", err);
+  });
 
 ///////////////////////////// routes
 server.get("/user", (req, res) => {
