@@ -18,3 +18,26 @@ table refers to a collection of data
 
 Primary key is a column (or collection of columns) 
     that uniquely identifies each row in the table.
+
+
+Constraints : 
+    NOT NULL
+    CHECK
+    DEFAULT
+    UNIQUE
+   PRIMARY KEY
+   FOREIGN KEY
+
+Foreign key :  is a link between the data in two tables.
+This index :  does not allow the field to have duplicate values
+
+
+create table channel (
+  id integer primary key autoincrement,
+  name varchar(128),
+  organization_id integer,
+  
+   CONSTRAINT fk_channel_organization_id
+  foreign key (organization_id) references organization (id)
+  ON DELETE CASCADE
+);
