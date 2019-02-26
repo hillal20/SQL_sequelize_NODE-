@@ -46,4 +46,5 @@ create table channel (
 
 Question 1: SQL Query to find second highest salary of Employee
 
-SELECT name, max(salary)  from employee where salary < (select max(salary) from employee);
+SELECT name, max(salary)  from employee 
+where salary < (select max(salary) from employee);
