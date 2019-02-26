@@ -37,7 +37,13 @@ create table channel (
   name varchar(128),
   organization_id integer,
   
-   CONSTRAINT fk_channel_organization_id
+  CONSTRAINT fk_channel_organization_id
   foreign key (organization_id) references organization (id)
   ON DELETE CASCADE
 );
+
+
+
+Question 1: SQL Query to find second highest salary of Employee
+
+SELECT name, max(salary)  from employee where salary < (select max(salary) from employee);
