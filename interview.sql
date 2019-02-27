@@ -55,9 +55,12 @@ SELECT * FROM suppliers
 where length(supplierName) <> 20; -- not equal
 
 SELECT * FROM customers
-where CustomerName like "%market%"
+where CustomerName like "%market%" 
         
 
+SELECT * FROM customers
+where CustomerName like "%market_"
+        
 SELECT * FROM customers
 where CustomerName like "%market__"
         
