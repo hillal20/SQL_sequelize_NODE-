@@ -48,3 +48,16 @@ Question 1: SQL Query to find second highest salary of Employee
 
 SELECT name, max(salary)  from employee 
 where salary < (select max(salary) from employee);
+
+
+
+SELECT * FROM suppliers
+where length(supplierName) <> 20; -- not equal
+
+SELECT * FROM customers
+where CustomerName like "%market%"
+        
+
+SELECT * FROM customers
+where CustomerName like "%market__"
+        
