@@ -1,6 +1,7 @@
 const express = require("express");
 const server = express();
 const Sequelize = require("sequelize");
+const { connectionFn } = require("./createUsers");
 
 const connection = new Sequelize("db", "user", "pass", {
   host: "localhost",
@@ -23,6 +24,7 @@ connection
     console.log(" === err in database connection ===");
   });
 
+connectionFn(connection);
 /////////////////////////////////// models
 
 const UserModel = connection.define(
