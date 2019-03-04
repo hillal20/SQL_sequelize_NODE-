@@ -104,7 +104,9 @@ const UserModel2 = connection.define("UserModel2", {
 connection
   .sync({ force: true })
   .then(() => {
-    UserModel2.bulkCreate(_USERS);
+    UserModel2.bulkCreate(_USERS)
+      .then(msg => console.log(msg))
+      .catch(err => console.log(err));
   })
   .catch(err => {
     console.log("==>", err);
