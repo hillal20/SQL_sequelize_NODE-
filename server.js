@@ -3,7 +3,8 @@ const server = express();
 const Sequelize = require("sequelize");
 const { connectionFn } = require("./createUsers");
 const _USERS = require("./data.json");
-const connection = new Sequelize("db", "user", "pass", {
+
+const db = new Sequelize("db", "user", "pass", {
   host: "localhost",
   dialect: "sqlite",
   storage: "db.sqlite",
@@ -15,8 +16,7 @@ const connection = new Sequelize("db", "user", "pass", {
   }
 });
 
-connection
-  .authenticate()
+db.authenticate()
   .then(msg => {
     console.log("=== database is connected===");
   })
@@ -27,7 +27,7 @@ connection
 //connectionFn(connection);
 /////////////////////////////////// model.create
 
-// const UserModel = connection.define(
+// const UserModel = db.define(
 //   "UserModel",
 //   {
 //     uuid: {
@@ -65,7 +65,7 @@ connection
 //   }
 // );
 
-// connection
+// db
 //   .sync({ force: true })
 //   .then(() => {
 //     UserModel.create({
@@ -82,8 +82,8 @@ connection
 ///////////////////////////// routes
 server.get("/user", (req, res) => {
   UserModel.create({
-    name: "khalil",
-    bio: "abado",
+    name: "wahid",
+    bio: "adouani",
     address: "milal algeria ",
     zipCode: 18340
   })
@@ -95,18 +95,17 @@ server.get("/user", (req, res) => {
     });
 });
 /////////////// model.bulkCreate
-const UserModel2 = connection.define("UserModel2", {
+const UserModel2 = db.define("UserModel2", {
   name: Sequelize.STRING,
   email: Sequelize.STRING,
   password: Sequelize.STRING
 });
 
-connection
-  .sync({ force: true })
+db.sync({})
   .then(() => {
     UserModel2.bulkCreate(_USERS)
-      .then(msg => console.log(msg))
-      .catch(err => console.log(err));
+      .then(msg => console.log("msg ===>", msg))
+      .catch(err => console.log("err ===>", err));
   })
   .catch(err => {
     console.log("==>", err);
