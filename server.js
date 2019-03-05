@@ -101,7 +101,7 @@ const UserModel2 = db.define("UserModel2", {
   password: Sequelize.STRING
 });
 
-db.sync({ force: true })
+db.sync({})
   .then(() => {
     UserModel2.bulkCreate(_USERS)
       .then(msg => console.log("msg ===>", msg))
@@ -115,10 +115,10 @@ db.sync({ force: true })
 server.get("/users", (req, res) => {
   UserModel2.findAll()
     .then(msg => {
-      res.jason({ users: msg });
+      res.json({ users: msg });
     })
     .catch(err => {
-      res.json({ err: err });
+      res.json({ err: "error" });
     });
 });
 
