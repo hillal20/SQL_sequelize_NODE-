@@ -3,6 +3,7 @@ const server = express();
 const Sequelize = require("sequelize");
 const { connectionFn } = require("./createUsers");
 const _USERS = require("./data.json");
+const Op = Sequelize.Op;
 
 const db = new Sequelize("db", "user", "pass", {
   host: "localhost",
@@ -113,7 +114,13 @@ db.sync({})
 ////////////////////
 
 server.get("/users", (req, res) => {
-  UserModel2.findAll()
+  UserModel2.findAll({
+    where: {
+      name: {
+        [Op.like]: "K%"
+      }
+    }
+  })
     .then(msg => {
       res.json({ users: msg });
     })
