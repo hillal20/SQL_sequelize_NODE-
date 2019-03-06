@@ -128,6 +128,16 @@ server.get("/users", (req, res) => {
       res.json({ err: "error" });
     });
 });
+////// all users
+server.get("/allusers", (req, res) => {
+  UserModel2.findAll({})
+    .then(msg => {
+      res.json({ users: msg });
+    })
+    .catch(err => {
+      res.json({ err: "error" });
+    });
+});
 //////////////////////// findById
 
 server.get("/one", (req, res) => {
@@ -140,6 +150,16 @@ server.get("/one", (req, res) => {
     });
 });
 /////////////////////////
+
+server.get("/delete", (req, res) => {
+  UserModel2.destroy({ where: { id: 3 } })
+    .then(msg => {
+      res.json({ users: "deleted" });
+    })
+    .catch(err => {
+      res.json({ err: "error" });
+    });
+});
 
 server.get("/update", (req, res) => {
   UserModel2.update(
