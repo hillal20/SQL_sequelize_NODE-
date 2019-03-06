@@ -128,6 +128,17 @@ server.get("/users", (req, res) => {
       res.json({ err: "error" });
     });
 });
+//////////////////////// findById
+
+server.get("/one", (req, res) => {
+  UserModel2.findById(7)
+    .then(msg => {
+      res.json({ users: msg });
+    })
+    .catch(err => {
+      res.json({ err: "error" });
+    });
+});
 
 ///////////////////////////
 server.listen(9999, () => {
