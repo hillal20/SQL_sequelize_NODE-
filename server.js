@@ -131,7 +131,25 @@ server.get("/users", (req, res) => {
 //////////////////////// findById
 
 server.get("/one", (req, res) => {
-  UserModel2.findById(7)
+  UserModel2.findById(11)
+    .then(msg => {
+      res.json({ users: msg });
+    })
+    .catch(err => {
+      res.json({ err: "error" });
+    });
+});
+/////////////////////////
+
+server.get("/update", (req, res) => {
+  UserModel2.update(
+    { name: "hilal", email: "hilal", password: "YJS38YVO6CD" },
+    {
+      where: {
+        id: 11
+      }
+    }
+  )
     .then(msg => {
       res.json({ users: msg });
     })
