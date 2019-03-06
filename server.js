@@ -163,7 +163,7 @@ server.get("/delete", (req, res) => {
 
 server.get("/update", (req, res) => {
   UserModel2.update(
-    { name: "hilal", email: "hilal", password: "YJS38YVO6CD" },
+    { name: "settara", email: "jijel", password: "YJS38YVO6CD" },
     {
       where: {
         id: 11
@@ -171,7 +171,7 @@ server.get("/update", (req, res) => {
     }
   )
     .then(msg => {
-      res.json({ users: msg });
+      res.json({ users: "updated" });
     })
     .catch(err => {
       res.json({ err: "error" });
