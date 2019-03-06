@@ -25,7 +25,7 @@ db.authenticate()
     console.log(" === err in database connection ===");
   });
 
-//connectionFn(connection);
+//connectionFn(db);
 /////////////////////////////////// model.create
 
 // const UserModel = db.define(
@@ -111,7 +111,7 @@ db.sync({})
   .catch(err => {
     console.log("==>", err);
   });
-////////////////////
+//////////////////// findAll users
 
 server.get("/users", (req, res) => {
   UserModel2.findAll({
@@ -128,7 +128,9 @@ server.get("/users", (req, res) => {
       res.json({ err: "error" });
     });
 });
-////// all users
+
+////// findAll users
+
 server.get("/allusers", (req, res) => {
   UserModel2.findAll({})
     .then(msg => {
@@ -149,7 +151,7 @@ server.get("/one", (req, res) => {
       res.json({ err: "error" });
     });
 });
-/////////////////////////
+///////////////////////// delete
 
 server.get("/delete", (req, res) => {
   UserModel2.destroy({ where: { id: 3 } })
@@ -160,7 +162,7 @@ server.get("/delete", (req, res) => {
       res.json({ err: "error" });
     });
 });
-
+//////////////////////////////// update
 server.get("/update", (req, res) => {
   UserModel2.update(
     { name: "settara", email: "jijel", password: "YJS38YVO6CD" },
@@ -177,7 +179,54 @@ server.get("/update", (req, res) => {
       res.json({ err: "error" });
     });
 });
+/////////////////////////// create posts table
+const Posts = db.define("Post", {
+  id: {
+    primaryKey: true,
+    type: Sequelize.UUID,
+    defaultValue: Sequelize.UUIDV4
+  },
+  title: Sequelize.STRING,
+  content: Sequelize.TEXT
+});
 
+Posts.belongsTo(UserModel2); // puts foreignkey userId in post table
+
+db.sync({})
+  .then(msg => {
+    Posts.create({
+      UserId: 1,
+      title: "first post ",
+      content: " post content  1 "
+    });
+  })
+  .catch(err => {
+    console.log("post err =====> ");
+  });
+
+////////////// all posts
+server.get("/allposts", (req, res) => {
+  Posts.findAll({})
+    .then(msg => {
+      res.json({ users: msg });
+    })
+    .catch(err => {
+      res.json({ err: "===>error" });
+    });
+});
+////// all posts include users
+
+server.get("/allpostswithusers", (req, res) => {
+  Posts.findAll({
+    include: [UserModel2]
+  })
+    .then(posts => {
+      res.json({ posts: posts });
+    })
+    .catch(err => {
+      res.json({ err: "error" });
+    });
+});
 ///////////////////////////
 server.listen(9999, () => {
   console.log("=== server on 9999 ===");
