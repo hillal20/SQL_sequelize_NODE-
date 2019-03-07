@@ -25,7 +25,7 @@ db.authenticate()
     console.log(" === err in database connection ===");
   });
 
-//connectionFn(db);
+connectionFn(db, server);
 /////////////////////////////////// model.create
 
 // const UserModel = db.define(
@@ -195,7 +195,7 @@ Posts.belongsTo(UserModel2); // puts foreignkey userId in post table
 db.sync({})
   .then(msg => {
     Posts.create({
-      UserId: 1,
+      UserModel2Id: 1,
       title: "first post ",
       content: " post content  1 "
     });

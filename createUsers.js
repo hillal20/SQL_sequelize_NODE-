@@ -2,32 +2,26 @@ const express = require("express");
 const Sequelize = require("sequelize");
 const UsersData = require("./data.json");
 const Router = express.Router();
-console.log(UsersData);
-const connectionFn = connection => {
-  connection.sync();
 
-  const userModel2 = connection.define("userModel2", {
+const connectionFn = (db, server) => {
+  const userModel3 = db.define("userModel3", {
     name: Sequelize.STRING,
-    email: {
-      type: Sequelize.STRING,
-      isEmail: true
-    },
-    password: {
-      type: Sequelize.STRING,
-      validate: {
-        isAlphanumeric: true
-      }
-    }
+    email: Sequelize.STRING,
+    password: Sequelize.STRING
   });
 
-  userModel2
-    .bulkCreate(UsersData)
-    .then(msg => {
-      console.log("== succesful ===", msg);
-    })
-    .catch(err => {
-      //console.log("== err ==", err);
-    });
+  userModel3.create({
+    name: "jalol",
+    email: "jalloa@jjjj.ccom",
+    password: "nannaanananana"
+  });
+
+  server.get("/allusers3", (req, res) => {
+    userModel3
+      .findAll()
+      .then(msg => res.json({ msg: msg }))
+      .catch(err => res.json(err));
+  });
 };
 
 module.exports = { connectionFn: connectionFn };
