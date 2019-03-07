@@ -191,7 +191,8 @@ const Posts = db.define("Post", {
 });
 
 Posts.belongsTo(UserModel2); // puts foreignkey userId in post table
-
+//or Posts.belongsTo(UserModel2, { foreignKey: "userId" }); to change
+// UserModel2Id to userId;
 db.sync({})
   .then(msg => {
     Posts.create({
