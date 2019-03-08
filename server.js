@@ -9,12 +9,12 @@ const db = new Sequelize("db", "user", "pass", {
   host: "localhost",
   dialect: "sqlite",
   storage: "db.sqlite",
-  operatorsAliases: false,
-  define: {
-    // the same define in the creation of the model
-    freezeTableName: true,
-    timestamps: false
-  }
+  operatorsAliases: false
+  // define: {
+  //   // the same define in the creation of the model
+  //   // freezeTableName: true,
+  //   //timestamps: false
+  // }
 });
 
 db.authenticate()
@@ -181,22 +181,24 @@ server.get("/update", (req, res) => {
 });
 /////////////////////////// create posts table
 const Posts = db.define("Post", {
-  id: {
-    primaryKey: true,
-    type: Sequelize.UUID,
-    defaultValue: Sequelize.UUIDV4
-  },
+  // id: {
+  //   primaryKey: true,
+  //   type: Sequelize.UUID,
+  //   defaultValue: Sequelize.UUIDV4
+  // },
   title: Sequelize.STRING,
   content: Sequelize.TEXT
 });
 
-Posts.belongsTo(UserModel2); // puts foreignkey userId in post table
-//or Posts.belongsTo(UserModel2, { foreignKey: "userId" }); to change
-// UserModel2Id to userId;
-db.sync({})
+Posts.belongsTo(UserModel2); /* puts foreignkey userId in post table or */
+//Posts.belongsTo(UserModel2, { as: "UserRef", foreignKey: "userId" });
+// to change  UserModel2Id to userId;
+db.sync({
+  //force: true /* to drop tables */
+})
   .then(msg => {
     Posts.create({
-      UserModel2Id: 1,
+      UserModel2Id: 3,
       title: "first post ",
       content: " post content  1 "
     });

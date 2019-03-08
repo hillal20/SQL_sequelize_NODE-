@@ -9,11 +9,16 @@ const connectionFn = (db, server) => {
     email: Sequelize.STRING,
     password: Sequelize.STRING
   });
-
-  userModel3.create({
-    name: "jalol",
-    email: "jalloa@jjjj.ccom",
-    password: "nannaanananana"
+  db.sync({}).then(msg => {
+    userModel3
+      .create({
+        name: "jalol",
+        email: "jalloa@jjjj.ccom",
+        password: "nannaanananana"
+      })
+      .catch(err => {
+        console.log(err);
+      });
   });
 
   server.get("/allusers3", (req, res) => {
