@@ -102,11 +102,46 @@ const UserModel2 = db.define("UserModel2", {
   password: Sequelize.STRING
 });
 
-db.sync({})
+db.sync({
+  force: true
+})
   .then(() => {
     UserModel2.bulkCreate(_USERS)
       .then(msg => console.log("msg ===>", msg))
       .catch(err => console.log("err ===>", err));
+  })
+  .then(msg => {
+    Posts.create({
+      UserModel2Id: 1,
+      title: "first post ",
+      content: " post content  1 "
+    });
+  })
+  .then(msg => {
+    Posts.create({
+      UserModel2Id: 2,
+      title: "second  post ",
+      content: " post content  2"
+    });
+  })
+  .then(msg => {
+    Posts.create({
+      UserModel2Id: 3,
+      title: "third  post ",
+      content: " post content  3 "
+    });
+  })
+  .then(msg => {
+    Comment.create({
+      PostsId: 1,
+      the_comment: "comment 1 "
+    });
+  })
+  .then(msg => {
+    Comment.create({
+      PostsId: 2,
+      the_comment: " comment 2"
+    });
   })
   .catch(err => {
     console.log("==>", err);
@@ -189,10 +224,15 @@ const Posts = db.define("Post", {
   title: Sequelize.STRING,
   content: Sequelize.TEXT
 });
+///// comments table
+const Comment = db.define("Comment", {
+  the_comment: Sequelize.STRING
+});
 
 Posts.belongsTo(UserModel2); /* puts foreignkey userId in post table or */
 //Posts.belongsTo(UserModel2, { as: "UserRef", foreignKey: "userId" });
 // to change  UserModel2Id to userId;
+Posts.hasMany(Comment, { as: "All_Comments" });
 db.sync({
   //force: true /* to drop tables */
 })
@@ -228,6 +268,24 @@ server.get("/allpostswithusers", (req, res) => {
     })
     .catch(err => {
       res.json({ err: "error" });
+    });
+});
+/////////// single post with comments
+server.get("/singlepost", (req, res) => {
+  Posts.findById(2, {
+    include: [
+      {
+        model: Comment,
+        as: "All_Comments",
+        attributes: ["the_comment"]
+      }
+    ]
+  })
+    .then(msg => {
+      res.json({ posts: msg });
+    })
+    .catch(err => {
+      res.json({ err: "===>error" });
     });
 });
 ///////////////////////////
