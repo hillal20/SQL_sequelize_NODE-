@@ -102,50 +102,6 @@ const UserModel2 = db.define("UserModel2", {
   password: Sequelize.STRING
 });
 
-db.sync({
-  force: true
-})
-  .then(() => {
-    UserModel2.bulkCreate(_USERS)
-      .then(msg => console.log("msg ===>", msg))
-      .catch(err => console.log("err ===>", err));
-  })
-  .then(msg => {
-    Posts.create({
-      UserModel2Id: 1,
-      title: "first post ",
-      content: " post content  1 "
-    });
-  })
-  .then(msg => {
-    Posts.create({
-      UserModel2Id: 2,
-      title: "second  post ",
-      content: " post content  2"
-    });
-  })
-  .then(msg => {
-    Posts.create({
-      UserModel2Id: 3,
-      title: "third  post ",
-      content: " post content  3 "
-    });
-  })
-  .then(msg => {
-    Comment.create({
-      PostsId: 1,
-      the_comment: "comment 1 "
-    });
-  })
-  .then(msg => {
-    Comment.create({
-      PostsId: 2,
-      the_comment: " comment 2"
-    });
-  })
-  .catch(err => {
-    console.log("==>", err);
-  });
 //////////////////// findAll users
 
 server.get("/users", (req, res) => {
@@ -233,9 +189,37 @@ Posts.belongsTo(UserModel2); /* puts foreignkey userId in post table or */
 //Posts.belongsTo(UserModel2, { as: "UserRef", foreignKey: "userId" });
 // to change  UserModel2Id to userId;
 Posts.hasMany(Comment, { as: "All_Comments" });
+
+////// create data /////////////////////////////
 db.sync({
-  //force: true /* to drop tables */
+  //force: true
 })
+  .then(() => {
+    UserModel2.bulkCreate(_USERS)
+      .then(msg => console.log("msg ===>", msg))
+      .catch(err => console.log("err ===>", err));
+  })
+  .then(msg => {
+    Posts.create({
+      UserModel2Id: 1,
+      title: "first post ",
+      content: " post content  1 "
+    });
+  })
+  .then(msg => {
+    Posts.create({
+      UserModel2Id: 2,
+      title: "second  post ",
+      content: " post content  2"
+    });
+  })
+  .then(msg => {
+    Posts.create({
+      UserModel2Id: 3,
+      title: "third  post ",
+      content: " post content  3 "
+    });
+  })
   .then(msg => {
     Posts.create({
       UserModel2Id: 3,
@@ -243,10 +227,23 @@ db.sync({
       content: " post content  1 "
     });
   })
-  .catch(err => {
-    console.log("post err =====> ");
-  });
 
+  .then(msg => {
+    Comment.create({
+      PostsId: 1,
+      the_comment: "comment 1 "
+    });
+  })
+  .then(msg => {
+    Comment.create({
+      PostsId: 2,
+      the_comment: "comment 2"
+    });
+  })
+
+  .catch(err => {
+    console.log("==>", err);
+  });
 ////////////// all posts
 server.get("/allposts", (req, res) => {
   Posts.findAll({})
