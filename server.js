@@ -12,7 +12,7 @@ const db = new Sequelize("db", "user", "pass", {
   operatorsAliases: false
   // define: {
   //   // the same define in the creation of the model
-  //   // freezeTableName: true,
+  //   // freezeTableName: true, /** no plural tables  */
   //   //timestamps: false
   // }
 });
@@ -170,7 +170,8 @@ server.get("/update", (req, res) => {
       res.json({ err: "error" });
     });
 });
-/////////////////////////// create posts table
+/////////////////////////// create  post table
+
 const Posts = db.define("Post", {
   // id: {
   //   primaryKey: true,
@@ -180,19 +181,37 @@ const Posts = db.define("Post", {
   title: Sequelize.STRING,
   content: Sequelize.TEXT
 });
-///// comments table
+///// ////////////////////////  create  comments table
+
 const Comment = db.define("Comment", {
   the_comment: Sequelize.STRING
 });
 
+//////////////////// create Project table
+
+const Project = db.define("Project", {
+  title: Sequelize.STRING
+});
+////////////////////////////////////  associations
+
 Posts.belongsTo(UserModel2); /* puts foreignkey userId in post table or */
 //Posts.belongsTo(UserModel2, { as: "UserRef", foreignKey: "userId" });
 // to change  UserModel2Id to userId;
+
 Posts.hasMany(Comment, { as: "All_Comments" });
 
-////// create data /////////////////////////////
+UserModel2.belongsToMany(Project, {
+  as: "project_tasks",
+  through: "UserModel2Projects"
+});
+Project.belongsToMany(UserModel2, {
+  as: "project_workers",
+  through: "UserModel2Projects"
+});
+
+//////////////////////////////////   create data in tables
 db.sync({
-  //force: true
+  force: true
 })
   .then(() => {
     UserModel2.bulkCreate(_USERS)
@@ -230,14 +249,28 @@ db.sync({
 
   .then(msg => {
     Comment.create({
-      PostsId: 1,
+      PostId: 1,
       the_comment: "comment 1 "
     });
   })
   .then(msg => {
     Comment.create({
-      PostsId: 2,
+      PostId: 2,
       the_comment: "comment 2"
+    });
+  })
+  .then(msg => {
+    Project.create({
+      title: "project 1"
+    }).then(project => {
+      project.setProject_workers([4, 5]);
+    });
+  })
+  .then(msg => {
+    Project.create({
+      title: "project 2"
+    }).then(project => {
+      project.setProject_workers([1, 3]);
     });
   })
 
@@ -269,13 +302,14 @@ server.get("/allpostswithusers", (req, res) => {
 });
 /////////// single post with comments
 server.get("/singlepost", (req, res) => {
-  Posts.findById(2, {
+  Posts.findById(1, {
     include: [
       {
         model: Comment,
         as: "All_Comments",
         attributes: ["the_comment"]
-      }
+      },
+      { model: UserModel2 }
     ]
   })
     .then(msg => {
