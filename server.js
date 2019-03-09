@@ -201,11 +201,11 @@ Posts.belongsTo(UserModel2); /* puts foreignkey userId in post table or */
 Posts.hasMany(Comment, { as: "All_Comments" });
 
 UserModel2.belongsToMany(Project, {
-  as: "project_tasks",
+  as: "Project_tasks",
   through: "UserModel2Projects"
 });
 Project.belongsToMany(UserModel2, {
-  as: "project_workers",
+  as: "Project_workers",
   through: "UserModel2Projects"
 });
 
@@ -326,7 +326,7 @@ server.get("/singlepost", (req, res) => {
 });
 
 ///////////////////////// add a worker
-server.get("/addworker", (req, res) => {
+server.get("/addusertoproject", (req, res) => {
   Project.findById(3)
     .then(project => {
       project.addProject_workers(6);
@@ -338,6 +338,22 @@ server.get("/addworker", (req, res) => {
       res.send(" *** err ****");
     });
 });
+
+///////////////// get users and projects
+
+server.get("/usersandprojects", (req, res) => {
+  UserModel2.findAll({
+    attributes: ["name"],
+    include: [{ model: Project, as: "Project_tasks", attributes: ["title"] }]
+  })
+    .then(msg => {
+      res.json({ msg: msg });
+    })
+    .catch(err => {
+      res.send(" *** err ****");
+    });
+});
+
 ///////////////////////////
 server.listen(9999, () => {
   console.log("=== server on 9999 ===");
