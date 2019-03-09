@@ -273,6 +273,11 @@ db.sync({
       project.setProject_workers([1, 3]);
     });
   })
+  .then(msg => {
+    Project.create({
+      title: "project 3"
+    });
+  })
 
   .catch(err => {
     console.log("==>", err);
@@ -317,6 +322,20 @@ server.get("/singlepost", (req, res) => {
     })
     .catch(err => {
       res.json({ err: "===>error" });
+    });
+});
+
+///////////////////////// add a worker
+server.get("/addworker", (req, res) => {
+  Project.findById(3)
+    .then(project => {
+      project.addProject_workers(6);
+    })
+    .then(msg => {
+      res.send("user 6 is added to project 3 ");
+    })
+    .catch(err => {
+      res.send(" *** err ****");
     });
 });
 ///////////////////////////
